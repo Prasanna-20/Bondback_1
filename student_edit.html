@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .profile-card {
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="url"],
+        input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[readonly] {
+            background-color: #f0f0f0;
+        }
+
+        .form-group {
+            width: 48%;
+            margin-bottom: 15px;
+        }
+
+        .form-group.full-width {
+            width: 100%;
+        }
+
+        .save-btn {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .save-btn:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 600px) {
+            .form-group {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-card">
+            <h2>Edit Profile</h2>
+            <form id="profile-form">
+                <div class="form-group full-width">
+                    <label for="profile_photo">Profile Picture:</label>
+                    <input type="file" id="profile_photo" name="profile_photo">
+                    <br>
+                    <!-- Display the current profile photo if available -->
+                    <img id="current-profile-photo" src="" alt="Profile Photo" style="max-width: 200px; margin-top: 10px; display: none;">
+                </div>
+
+                
+
+                <div class="form-group">
+                    <label for="fullname">Name:</label>
+                    <input type="text" id="fullname" name="fullname">
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password">
+                </div>
+
+                <div class="form-group">
+                    <label for="uec-no">UEC No:</label>
+                    <input type="text" id="uec-no" name="uec_no">
+                </div>
+
+                <div class="form-group">
+                    <label for="contact-no">Contact No:</label>
+                    <input type="text" id="contact-no" name="contact_no">
+                </div>
+
+                <div class="form-group">
+                    <label for="year">Year:</label>
+                    <input type="text" id="year" name="year">
+                </div>
+
+                <div class="form-group">
+                    <label for="branch">Branch:</label>
+                    <input type="text" id="branch" name="branch">
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="linkedin">LinkedIn:</label>
+                    <input type="url" id="linkedin" name="linkedin">
+                </div>
+
+                <button type="button" class="save-btn" onclick="updateProfile()">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function fetchProfile() {
+            fetch('/api/getStudentProfile') // Assuming this endpoint exists to get student profile data
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message);
+                    } else {
+                        // Populate the form fields with fetched data
+                       
+                        document.getElementById('fullname').value = data.fullname || '';
+                        document.getElementById('username').value = data.username || '';
+                        document.getElementById('email').value = data.email || '';
+                        document.getElementById('password').value = data.password || '';
+                        document.getElementById('uec-no').value = data.uec || '';
+                        document.getElementById('contact-no').value = data.contactNo || '';
+                        document.getElementById('year').value = data.year || '';
+                        document.getElementById('branch').value = data.branch || '';
+                        document.getElementById('linkedin').value = data.linkedin_link || '';
+                        
+                    }
+                    const profilePhotoUrl = `/uploads/${data.profile_photo}`;
+                if (profilePhotoUrl) {
+                    const profilePhotoElement = document.getElementById('current-profile-photo');
+                    profilePhotoElement.src = profilePhotoUrl;
+                    profilePhotoElement.style.display = 'block'; // Make the image visible
+                } else {
+                    document.getElementById('current-profile-photo').style.display = 'none';
+                }
+                })
+                .catch(error => {
+                    console.error('Error fetching profile:', error);
+                    alert('Error fetching profile.');
+                });
+        }
+
+        // Call fetchProfile when the page loads
+        window.onload = fetchProfile;
+
+        function updateProfile() {
+    // Create a FormData object
+    const formData = new FormData();
+    
+    // Append text fields to FormData
+    formData.append('fullname', document.getElementById('fullname').value);
+    formData.append('username', document.getElementById('username').value);
+    formData.append('uec', document.getElementById('uec-no').value);
+    formData.append('password', document.getElementById('password').value);
+    formData.append('contactNo', document.getElementById('contact-no').value);
+    formData.append('year', document.getElementById('year').value);
+    formData.append('branch', document.getElementById('branch').value);
+    formData.append('linkedin_link', document.getElementById('linkedin').value);
+    
+    // Append the file (profile photo) to FormData
+    const profilePhotoInput = document.getElementById('profile_photo');
+    if (profilePhotoInput.files.length > 0) {
+        formData.append('profile_photo', profilePhotoInput.files[0]);
+    }
+
+    // Send the FormData object to the backend
+    fetch('/api/updateStudentProfile', {
+        method: 'POST',
+        body: formData, // Send FormData, which includes both text and file data
+    })
+    .then(response => response.json())
+    .then(data => alert(data.message))
+    .catch(error => alert('Error updating profile.'));
+}
+    </script>
+</body>
+</html>

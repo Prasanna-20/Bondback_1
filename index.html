@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chat-box {
+            max-height: 400px;
+            overflow-y: scroll;
+            margin-top: 20px;
+        }
+        .message {
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .message.sent {
+            background-color: #DCF8C6;
+            text-align: right;
+        }
+        .message.received {
+            background-color: #fff;
+            text-align: left;
+        }
+        .navbar-custom {
+            background-color: #007bff;
+        }
+        .navbar-custom a {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="#">Chat App</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="logoutBtn" style="display:none;">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Chat Interface -->
+    <div class="container mt-5">
+        <div id="chat-container" style="display: none;">
+            <div class="row">
+                <div class="col-md-3">
+                    <h4>Search Users</h4>
+                    <input type="text" class="form-control" id="search-users" placeholder="Search users...">
+                    <ul id="user-list" class="list-group mt-2">
+                        <!-- User list will be populated here -->
+                    </ul>
+                </div>
+                <div class="col-md-9">
+                    <h4 id="chat-header">Select a user to chat</h4>
+                    <div id="messages" class="chat-box"></div>
+                    <div class="input-group mt-3">
+                        <input type="text" class="form-control" id="message-input" placeholder="Type a message">
+                        <button id="sendBtn" class="btn btn-primary" id="send-message">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login / Register Forms -->
+        <div id="auth-container" style="display: block;">
+            <h2>Login or Register</h2>
+            <form id="login-form">
+                <div class="mb-3">
+                    <label for="login-email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="login-email" placeholder="Enter email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="login-password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="login-password" placeholder="Password" required>
+                </div>
+                <button id="loginBtn" type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <hr>
+            <h5>Don't have an account? <button class="btn btn-link" id="show-register">Sign Up</button></h5>
+            <form id="register-form" style="display: none;">
+                <div class="mb-3">
+                    <label for="register-email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="register-email" placeholder="Enter email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="register-password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="register-password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+                <hr>
+                <h5>Already have an account? <button class="btn btn-link" id="show-login">Login</button></h5>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Bootstrap JS -->
+   
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword,signOut } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyDbbhY5INR8eecF3gXWwKB8pJ75Tko3Zpw",
+          authDomain: "bondback-7664f.firebaseapp.com",
+          databaseURL: "https://bondback-7664f-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "bondback-7664f",
+          storageBucket: "bondback-7664f.firebasestorage.app",
+          messagingSenderId: "108312823634",
+          appId: "1:108312823634:web:eef02a0e5ea5b483761c8b",
+          measurementId: "G-D8M41LHR1J"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    // User Authentication
+    // User Authentication
+document.addEventListener("DOMContentLoaded", () => {
+    // Send Message Functionality
+    const sendBtn = document.getElementById("sendBtn"); // This was undefined in your code
+    sendBtn.addEventListener("click", () => {
+        const messageInput = document.getElementById("message-input");
+        const message = messageInput.value;
+
+        if (message.trim()) {
+            const currentUserId = auth.currentUser.uid;  // Get the current user's UID
+            const messagesRef = ref(database, `messages/${currentUserId}`);  // Store messages under the logged-in user's ID
+            push(messagesRef, {
+                message: message,
+                sentBy: 'me',  // This could be dynamic, e.g., based on logged-in user
+                timestamp: Date.now(),
+            });
+
+            messageInput.value = "";  // Clear input field
+        }
+    });
+
+    // Typing Indicator (Optional)
+    const messageInput = document.getElementById("message-input");
+
+    if (messageInput) {
+        messageInput.addEventListener("focus", () => {
+            console.log("User is typing...");
+        });
+
+        messageInput.addEventListener("blur", () => {
+            console.log("User stopped typing...");
+        });
+    } else {
+        console.error("Message input element not found.");
+    }
+
+    // User Authentication
+    const loginBtn = document.getElementById("loginBtn");
+    if (!loginBtn) {
+        console.error("Login button not found in the DOM.");
+        return;
+    }
+
+    loginBtn.addEventListener("click", async (e) => {
+        e.preventDefault();  // Prevent form submission if it's a button within a form
+
+        const emailInput = document.getElementById("login-email");
+        const passwordInput = document.getElementById("login-password");
+
+        if (emailInput && passwordInput) {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            try {
+                // Sign in the user using Firebase Authentication
+                await signInWithEmailAndPassword(auth, email, password);
+
+                // After successful login, get the current user's UID
+                const currentUserId = auth.currentUser.uid;  // Store the logged-in user's UID
+                console.log("Logged in as:", currentUserId); // Debugging purpose
+
+                // Hide login form and show chat container
+                const loginForm = document.getElementById("login-form");
+                const chatBox = document.getElementById("chat-container");
+
+                if (loginForm && chatBox) {
+                    loginForm.style.display = "none";
+                    chatBox.style.display = "block";
+                    loadMessages(currentUserId);  // Pass currentUserId to load messages for this user
+                } else {
+                    console.error("Required elements (loginForm or chatBox) are missing");
+                }
+            } catch (error) {
+                alert("Login failed: " + error.message);
+            }
+        } else {
+            console.error("Email or password field not found");
+        }
+    });
+
+    // Logout Event Listener
+    const logoutBtn = document.getElementById("logoutBtn");
+    logoutBtn.addEventListener("click", async () => {
+        try {
+            await signOut(auth);
+            document.getElementById("chat-container").style.display = "none"; // Corrected the element ID
+            document.getElementById("auth-container").style.display = "block"; // Corrected the element ID
+            alert("Logged out successfully");
+        } catch (error) {
+            alert("Logout failed: " + error.message);
+        }
+    });
+
+    // Load Messages from Firebase
+    function loadMessages(currentUserId) {
+        const messagesRef = ref(database, `messages/${currentUserId}`);
+        onValue(messagesRef, (snapshot) => {
+            const messagesContainer = document.getElementById('messages');
+            messagesContainer.innerHTML = '';  // Clear current messages
+
+            snapshot.forEach((childSnapshot) => {
+                const messageData = childSnapshot.val();
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = messageData.message;
+                messageDiv.classList.add(messageData.sentBy === 'me' ? 'sent' : 'received');
+                messagesContainer.appendChild(messageDiv);
+            });
+        });
+    }
+
+    // Load User List from Firebase
+    function loadUserList() {
+        const usersRef = ref(database, 'users');
+        onValue(usersRef, (snapshot) => {
+            const userList = document.getElementById('user-list');
+            userList.innerHTML = '';  // Clear current user list
+
+            snapshot.forEach((childSnapshot) => {
+                const userData = childSnapshot.val();
+                const userItem = document.createElement('li');
+                userItem.classList.add('list-group-item');
+                userItem.textContent = userData.username;
+
+                // Add event listener to each user to start a chat
+                userItem.addEventListener('click', () => {
+                    startChat(userData.userId);
+                });
+
+                userList.appendChild(userItem);
+            });
+        });
+    }
+
+    // Start a chat with the selected user
+    function startChat(userId) {
+        const chatHeader = document.getElementById('chat-header');
+        chatHeader.textContent = `Chat with ${userId}`;  // Change header to selected user
+
+        // Load messages for this user (optional: you could filter by userId)
+        loadMessages(userId);
+    }
+
+    // Call loadUserList when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        loadUserList();
+    });
+});
+
+     </script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+</body>
+</html>

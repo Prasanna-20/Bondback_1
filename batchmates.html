@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Batchmates</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #c1d1db;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .table {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header text-white bg-primary text-center">
+                Batchmates
+            </div>
+            <div class="card-body">
+                <form id="batchmateForm" class="mb-3">
+                    <label for="passYear" class="form-label">Enter Passing Year</label>
+                    <input type="number" id="passYear" class="form-control" placeholder="e.g., 2023" required>
+                    <button type="button" class="btn btn-primary mt-3" onclick="fetchBatchmates()">View Batchmates</button>
+                </form>
+                <table class="table table-bordered table-striped" id="batchmatesTable">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Contact</th>
+                            <th>Current Organization</th>
+                            <th>Domain</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Batchmates data will be dynamically injected here -->
+                    </tbody>
+                </table>
+                <div class="pagination-controls mt-3 text-center">
+                    <button class="btn btn-secondary me-2" id="prevPage" onclick="changePage('prev')" disabled>Previous</button>
+                    <span id="pageInfo">Page 1</span>
+                    <button class="btn btn-secondary ms-2" id="nextPage" onclick="changePage('next')" disabled>Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+       /* function fetchBatchmates() {
+            const passYear = document.getElementById('passYear').value;
+            if (!passYear) {
+                alert('Please enter a passing year');
+                return;
+            }
+
+            fetch(`http://localhost:5000/getBatchmates/${passYear}`)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#batchmatesTable tbody');
+                    tableBody.innerHTML = ''; // Clear previous results
+
+                    if (data.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="4" class="text-center">No batchmates found</td></tr>';
+                        return;
+                    }
+
+                    data.forEach(batchmate => {
+                        const row = `
+                            <tr>
+                                <td>${batchmate.fullname}</td>
+                                <td>${batchmate.email}</td>
+                                <td>${batchmate.contactNo}</td>
+                                <td>${batchmate.curr_org || 'N/A'}</td>
+                                <td>${batchmate.domain}</td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }*/
+        let allBatchmates = []; // Store all batchmates fetched from the backend
+    let currentPage = 1;    // Current page number
+    const limit = 5;       // Items per page
+
+    function fetchBatchmates() {
+        const passYear = document.getElementById('passYear').value;
+        if (!passYear) {
+            alert('Please enter a passing year');
+            return;
+        }
+
+        fetch(`http://localhost:5000/getBatchmates/${passYear}`)
+            .then(response => response.json())
+            .then(data => {
+                allBatchmates = data; // Store the entire result
+                currentPage = 1; // Reset to the first page
+                renderBatchmates(); // Display the first page
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function renderBatchmates() {
+        const tableBody = document.querySelector('#batchmatesTable tbody');
+        tableBody.innerHTML = ''; // Clear the table
+
+        // Calculate the start and end index for the current page
+        const startIndex = (currentPage - 1) * limit;
+        const endIndex = startIndex + limit;
+
+        const batchmatesToDisplay = allBatchmates.slice(startIndex, endIndex);
+
+        if (batchmatesToDisplay.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No batchmates found</td></tr>';
+            return;
+        }
+
+        // Add rows to the table
+        batchmatesToDisplay.forEach(batchmate => {
+            const row = `
+                <tr>
+                    <td>${batchmate.fullname}</td>
+                     <td><a href="mailto:${batchmate.email}" class="text-decoration-none">${batchmate.email}</a></td>
+                    <td>${batchmate.contactNo}</td>
+                    <td>${batchmate.curr_org || 'N/A'}</td>
+                    <td>${batchmate.domain}</td>
+                </tr>
+            `;
+            tableBody.innerHTML += row;
+        });
+
+        // Update pagination controls
+        document.getElementById('pageInfo').textContent = `Page ${currentPage}`;
+        document.getElementById('prevPage').disabled = currentPage === 1;
+        document.getElementById('nextPage').disabled = endIndex >= allBatchmates.length;
+    }
+
+    function changePage(direction) {
+        if (direction === 'prev' && currentPage > 1) {
+            currentPage--;
+        } else if (direction === 'next' && currentPage * limit < allBatchmates.length) {
+            currentPage++;
+        }
+        renderBatchmates(); // Re-render the current page
+    }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

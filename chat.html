@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Home Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(207, 203, 231);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: #175c95;
+            padding: 10px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .left {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .left a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .left img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            width: 700px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .navbar .right {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .right a, .navbar .right button {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin-left: 50px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .right a i, .navbar .right button i {
+            margin-right: 15px;
+        }
+
+        .content {
+            margin-left: 0;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+
+        /* Posts Container Styles */
+        .posts-container {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 20px;
+            position: relative;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .post {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .post:hover {
+            transform: translateY(-5px);
+        }
+
+        .post .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .post .post-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .post .post-header span {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .post .post-content img {
+            width: 80%;
+            max-width: 80%;
+            height: auto;
+            display: block;
+            margin-top: 15px;
+            border-radius: 8px;
+            align-content: center;
+        }
+
+        .post .post-content p {
+            margin-top: 10px;
+            color: #555;
+            font-size: 16px;
+        }
+
+        .search-result {
+            padding: 10px;
+            background-color: #f0f0f0;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-result:hover {
+            background-color: #e0e0e0;
+        }
+
+        #posts-container .col-md-6,
+        #posts-container .col-lg-4 {
+            padding: 15px;
+        }
+
+        /* Add Vertical Graphics or Educational Icons */
+        .posts-container::before,
+        .posts-container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 50px;
+            background-image: url('https://img.icons8.com/ios/50/000000/books.png'); /* You can change this to other educational icons */
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .posts-container::before {
+            left: -10px;
+        }
+
+        .posts-container::after {
+            right: -10px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .posts-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="left">
+            <a href="#">
+                <img src="https://via.placeholder.com/30" alt="Logo">
+                Home
+            </a>
+        </div>
+        <div class="right">
+            <a href="#">Profile</a>
+            <a href="#">Settings</a>
+            <button>Logout</button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <div class="posts-container">
+                <div class="post">
+                    <div class="post-header">
+                        <img src="https://via.placeholder.com/50" alt="Author">
+                        <span>Post Title 1</span>
+                    </div>
+                    <div class="post-content">
+                        <img src="https://via.placeholder.com/600x400" alt="Post Image">
+                        <p>Content of the post goes here. It's an educational post that contains useful information for students.</p>
+                    </div>
+                </div>
+                <div class="post">
+                    <div class="post-header">
+                        <img src="https://via.placeholder.com/50" alt="Author">
+                        <span>Post Title 2</span>
+                    </div>
+                    <div class="post-content">
+                        <img src="https://via.placeholder.com/600x400" alt="Post Image">
+                        <p>Content of the post goes here. This is another post with educational information to help students learn.</p>
+                    </div>
+                </div>
+                <!-- Additional Posts can go here -->
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

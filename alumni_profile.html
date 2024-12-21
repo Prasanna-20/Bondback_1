@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Profile - BondBack</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    /* Reset and Base Styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: url('https://png.pngtree.com/thumb_back/fh260/background/20220410/pngtree-admin-register-homepage-community-photo-image_63285.jpg') no-repeat center center/cover;
+      background-size:cover;
+      color: #333;
+    }
+
+    .container {
+      position: relative;
+      max-width: 700px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      padding: 40px 30px;
+      text-align: center;
+      margin: 20px auto;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-picture {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid #9f0b49;
+      margin: 0 auto 20px auto;
+    }
+
+    .profile-picture img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-header {
+      font-size: 1.8rem;
+      color: #9f0b49;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .profile-details {
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    .detail-item {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+
+    .detail-item span {
+      font-weight: bold;
+    }
+
+    .action-buttons {
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-block;
+      text-decoration: none;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: bold;
+      background: linear-gradient(135deg, #9f0b49, #ff758f);
+      margin: 10px;
+      transition: all 0.4s ease-in-out;
+    }
+
+    .button:hover {
+      transform: scale(1.03);
+      background: linear-gradient(135deg, #ff758f, #ff8ba0);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Profile Picture -->
+    <div class="profile-picture">
+      <img id="profile_pic" name="profile_pic" src="https://www.w3schools.com/w3images/avatar2.png" alt="Profile Picture">
+    </div>
+
+    <!-- Profile Header -->
+    <div class="profile-header">Welcome, <span id="usernameDisplay">Alumni</span>!</div>
+
+    <!-- Profile Details -->
+    <div class="profile-details">
+        <div class="detail-item">
+          <span>Username:</span> <span id="username">Loading...</span>
+        </div>
+        <!--<div class="detail-item">
+          <span>Password:</span> <span id="password">Loading...</span>
+        </div>-->
+        <div class="detail-item">
+          <span>Full Name:</span> <span id="name">Loading...</span>
+        </div>
+        <div class="detail-item">
+          <span>Contact Number:</span> <span id="contact-no">Loading...</span>
+        </div>
+        <div class="detail-item">
+          <span>Email Address:</span> <span id="email">Loading...</span>
+        </div>
+        <div class="detail-item">
+          <span>Passing Year:</span> <span id="pass_year">Loading...</span>
+        </div>
+        
+        <div class="detail-item">
+          <span>Current Organization:</span> <span id="curr_org">Loading...</span>
+        </div>
+        <div class="detail-item">
+            <span>Domain:</span> <span id="domain">Loading...</span>
+          </div>
+          <div class="detail-item">
+            <span>Location:</span> <span id="location">Loading...</span>
+          </div>
+
+        <div class="detail-item">
+          <span>LinkedIn:</span> <span id="linkedin"><a href="#" target="_blank" style="color: #9f0b49;">View Profile</a></span>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <a href="alumni_edit.html" class="button">Edit Profile</a>
+      <a href="alumni_home.html" class="button">Back</a>
+    </div>
+  </div>
+
+  <script>
+    // Simulating data fetched from the backend or signup form
+    
+    function showProfile() {
+    fetch('api/getAlumniProfile')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Populate the fields dynamically with fetched data
+                console.log(data.profile_photo)
+                document.getElementById('name').textContent = `${data.fullname}`;
+                document.getElementById('username').textContent = `@${data.username}`;
+                document.getElementById('email').textContent = data.email;
+                //document.getElementById('password').textContent = data.password;
+                //document.getElementById('uec-no').textContent = data.uec;
+                document.getElementById('contact-no').textContent = data.contactNo;
+                document.getElementById('pass_year').textContent = data.pass_year;
+                //document.getElementById('branch').textContent = data.branch;
+                document.getElementById('curr_org').textContent = data.curr_org;
+                document.getElementById('domain').textContent = data.domain;
+                document.getElementById('location').textContent = data.location;
+                
+                //document.getElementById('linkedin').href = data.linkedin_link || '#';
+                //document.getElementById('linkedin').textContent = data.linkedin_link ? 'View LinkedIn Profile' : 'LinkedIn not available';
+                const linkedinLink = document.querySelector('#linkedin a'); // Select the <a> tag inside the #linkedin span
+                linkedinLink.href = data.linkedin_link || '#';
+                linkedinLink.textContent = data.linkedin_link ? 'View LinkedIn Profile' : 'LinkedIn not available';
+                linkedinLink.style.color = data.linkedin_link ? '#9f0b49' : 'gray'; // Optional: Change color if no link available
+                linkedinLink.target = data.linkedin_link ? '_blank' : '_self'; // Open in a new tab if a valid link
+                //document.getElementById('profile_pic').src = data.profile_photo;
+                document.getElementById('profile_pic').src = `/uploads/${data.profile_photo}`;
+
+
+
+
+            })
+            .catch(error => {
+                console.error('There was a problem fetching the profile data:', error);
+            });
+       }
+        document.addEventListener('DOMContentLoaded', showProfile);
+  </script>
+
+  
+</body>
+</html>

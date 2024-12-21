@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Home Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- For icons -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(207, 203, 231);
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #175c95;
+            padding: 10px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .left {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .left a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .left img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            width: 700px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .navbar .right {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .right a, .navbar .right button {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin-left: 50px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .right a i, .navbar .right button i {
+            margin-right: 15px;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #7f9ab0;
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 60px;
+            z-index: 1;
+        }
+
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        .sidebar .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            font-size: 36px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .content {
+            margin-left: 0;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+
+        .post {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 15px 15px 15px rgba(22, 18, 18, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .post .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .post .post-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .post .post-header span {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .post .post-content img {
+            width: 100%;
+            max-width: 75%;
+            height: auto;
+            display: block;
+            margin: 10px auto;
+        }
+
+        .post .post-content p {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="left">
+            <!--<a href="javascript:void(0)" onclick="openSidebar()">
+                <img src="https://via.placeholder.com/30" alt="Profile Image"> <!-- User's Profile Image -->
+                <!--<span>Student</span> <!-- User's Name -->
+            <!--</a>-->
+
+            <a href="javascript:void(0)" onclick="openSidebar()">
+                <img id="profileImage" src="https://via.placeholder.com/30" alt="Profile Image" style="border-radius: 50%;"> <!-- User's Profile Image -->
+                <span id="profileName">Student</span> <!-- User's Name -->
+            </a>
+            
+        </div>
+        <div class="search-bar">
+            <!--<input type="text" placeholder="Search...">-->
+            <input type="text" id="searchInput" placeholder="Search..." oninput="performSearch()" />
+            <div id="searchResults"></div>
+        </div>
+        <div class="right">
+            <a href="alumni_view.html"><i class="fas fa-users"></i> View Alumni</a>
+            <a href="./index.html"><i class="fas fa-comments"></i> Chat</a>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeSidebar()">&times;</a>
+        <a href="/student_profile.html">View Profile</a>
+        <a href="/student_edit.html">Edit Profile</a>
+        <a href="/student_signin.html">Log Out</a>
+    </div>
+
+    <!--<div id="main-content" class="content">
+        
+        <div class="posts-container">
+            <div class="post">
+                <div class="post-header">
+                    <img src="https://via.placeholder.com/40" alt="User Profile">
+                    <span>John Doe</span>
+                </div>
+                <div class="post-content">
+                    <img src="Student.png" alt="Post Image">
+                    <p>This is an example of a post. It could contain text, images, or links.</p>
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+    <div id="main-content" class="content">
+        <!-- Post Section -->
+        <div id="posts-container" class="posts-container">
+            <!-- Posts will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        function openSidebar() {
+            document.getElementById("sidebar").style.width = "250px";
+            document.getElementById("main-content").style.marginLeft = "250px";
+        }
+
+        function closeSidebar() {
+            document.getElementById("sidebar").style.width = "0";
+            document.getElementById("main-content").style.marginLeft = "0";
+        }
+
+        function loadUserProfile() {
+        fetch('/api/getStudentProfile') // Adjust the API endpoint if needed
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user profile');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Update the profile image and name dynamically
+                const profileImage = document.getElementById('profileImage');
+                const profileName = document.getElementById('profileName');
+
+                profileImage.src = data.profile_photo ? `/uploads/${data.profile_photo}` : 'https://via.placeholder.com/30';
+                profileName.textContent = data.fullname || 'Student'; // Fallback name
+            })
+            .catch(error => {
+                console.error('Error loading user profile:', error);
+            });
+    }
+
+    // Call the function when the page loads
+    document.addEventListener('DOMContentLoaded', loadUserProfile);
+
+        async function fetchPosts() {
+        try {
+            const response = await fetch('http://localhost:5000/getPosts');; // API to fetch posts
+            const posts = await response.json();
+
+            // Select the posts container
+            const postsContainer = document.getElementById('posts-container');
+
+            // Clear any existing posts
+            postsContainer.innerHTML = '';
+
+            // Loop through the fetched posts and render them
+            posts.forEach(post => {
+                // Create post elements dynamically
+                const postDiv = document.createElement('div');
+                postDiv.className = 'post';
+
+                const postHeader = document.createElement('div');
+                postHeader.className = 'post-header';
+
+                const profileImg = document.createElement('img');
+                profileImg.src = post.profile_photo; // Placeholder for profile image
+                profileImg.alt = 'User Profile';
+
+                const fullNameSpan = document.createElement('span');
+                fullNameSpan.textContent = post.fullname;
+
+                postHeader.appendChild(profileImg);
+                postHeader.appendChild(fullNameSpan);
+
+                const postContent = document.createElement('div');
+                postContent.className = 'post-content';
+
+                if (post.image_url) {
+                    const postImg = document.createElement('img');
+                    postImg.src = post.image_url;
+                    postImg.alt = 'Post Image';
+                    postContent.appendChild(postImg);
+                }
+
+                const postText = document.createElement('p');
+                postText.textContent = post.content;
+                postContent.appendChild(postText);
+
+                postDiv.appendChild(postHeader);
+                postDiv.appendChild(postContent);
+
+                postsContainer.appendChild(postDiv);
+            });
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+    }
+    /*async function fetchPosts() {
+            try {
+                const response = await fetch('http://localhost:5000/getPosts'); // Fetch posts from backend
+                const posts = await response.json();
+
+                const postsContainer = document.getElementById('posts-container');
+                postsContainer.innerHTML = ''; // Clear existing posts
+
+                posts.forEach(post => {
+                    // Create post container
+                    const postDiv = document.createElement('div');
+                    postDiv.className = 'post';
+
+                    // Header: Profile photo + Full name
+                    const postHeader = document.createElement('div');
+                    postHeader.className = 'post-header';
+
+                    const profileImg = document.createElement('img');
+                    profileImg.src = post.profile_photo || 'https://via.placeholder.com/40'; // Default if no photo
+                    profileImg.alt = 'Profile Photo';
+                    profileImg.style.width = '40px';
+                    profileImg.style.height = '40px';
+                    profileImg.style.borderRadius = '50%';
+
+                    const fullNameSpan = document.createElement('span');
+                    fullNameSpan.textContent = post.fullname;
+
+                    postHeader.appendChild(profileImg);
+                    postHeader.appendChild(fullNameSpan);
+
+                    // Content: Post text and image
+                    const postContent = document.createElement('div');
+                    postContent.className = 'post-content';
+
+                    if (post.image_url) {
+                        const postImg = document.createElement('img');
+                        postImg.src = post.image_url;
+                        postImg.alt = 'Post Image';
+                        postImg.style.maxWidth = '100%';
+                        postContent.appendChild(postImg);
+                    }
+
+                    const postText = document.createElement('p');
+                    postText.textContent = post.content;
+                    postContent.appendChild(postText);
+
+                    postDiv.appendChild(postHeader);
+                    postDiv.appendChild(postContent);
+                    postsContainer.appendChild(postDiv);
+                });
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        }*/
+
+
+    // Call fetchPosts when the page loads
+    window.onload = fetchPosts;
+
+    function performSearch() {
+    const query = document.getElementById('searchInput').value;
+    if (!query) {
+        document.getElementById('searchResults').innerHTML = ''; // Clear results if input is empty
+        return;
+    }
+
+    fetch(`http://localhost:5000/search?q=${encodeURIComponent(query)}`)
+    .then(response => response.json())
+    .then(data => {
+        console.log('Frontend API Response:', data); // Log the API response in the browser console
+        let resultsHTML = '';
+        data.forEach(item => {
+            if (item.type === 'alumni') {
+                resultsHTML += `
+                    <div class="search-result" onclick="redirectToProfile('alumni', '${item.email}')">
+                👨‍🎓 Alumni: ${item.fullname} - ${item.curr_org} (${item.pass_year}, ${item.domain})
+            </div>`;
+            } else if (item.type === 'post') {
+                resultsHTML += `
+                    <div class="search-result" onclick="redirectToProfile('post', ${item.id})">
+                        📄 Post: ${item.title} - ${item.content}
+                    </div>`;
+            } else if (item.type === 'student') {
+                console.log('Student Data:', item); // Log each student record
+                resultsHTML += `
+                    <div class="search-result" onclick="redirectToProfile('student', '${item.email}')">
+                        👩‍🎓 Student: ${item.fullname} - ${item.branch || 'N/A'} (${item.uec || 'N/A'})
+                    </div>`;
+            }
+        });
+
+        document.getElementById('searchResults').innerHTML = resultsHTML;
+    })
+    .catch(err => console.error('Search error:', err));
+
+}
+
+function redirectToProfile(type, email) {
+    // Redirect to the respective profile page inside the 'profiles' folder
+    window.location.href = `/views/${type}_profile.html?email=${email}`;
+}
+
+
+    </script>
+</body>
+</html>

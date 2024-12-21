@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Posts</title>
+    <hr class="header-line">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f3c6c655;
+        }
+       
+        h1 {
+            color: #333;
+        }
+        .header-line {
+        border: none;
+        border-top: 2px solid #ccc; /* Customize thickness and color */
+        margin-top: 10px;
+        margin-bottom: 20px; /* Space between the line and the posts */
+    }
+        .post {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 15px 15px 15px rgba(22, 18, 18, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .post img {
+            max-width: 90%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .post-title {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .post hr {
+        margin-top: 20px;
+        border: none;
+        border-top: 1px solid #ccc;
+    }
+        .post-content {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        .post-meta {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .delete-btn {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Posts</h1>
+    <div id="posts-container">
+        <!-- Posts will be dynamically rendered here -->
+    </div>
+
+    <script>
+        // Fetch user profile and posts
+        fetch('/api/getAlumniProfile')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user profile');
+                }
+                return response.json();
+            })
+            .then(profileData => {
+                const userEmail = profileData.email;
+
+                // Fetch posts for the logged-in user using their email
+                return fetch(`/api/myposts?email=${encodeURIComponent(userEmail)}`);
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user posts');
+                }
+                return response.json();
+            })
+            .then(posts => {
+                const container = document.getElementById('posts-container');
+
+                if (posts.length === 0) {
+                    container.innerHTML = '<p>No posts found.</p>';
+                    return;
+                }
+
+                posts.forEach(post => {
+                    const postElement = document.createElement('div');
+                    postElement.classList.add('post');
+
+                    postElement.innerHTML = `
+                        <h2 class="post-title">${post.title}</h2>
+                        ${post.image_url ? `<img src="${post.image_url}" alt="Post Image">` : ''}
+                        <p class="post-content">${post.content}</p>
+                        <p class="post-meta">Posted on: ${new Date(post.created_at).toLocaleDateString()}</p>
+                        <hr>
+                        <button class="delete-btn" data-id="${post.id}">Delete Post</button>
+                    `;
+
+                    container.appendChild(postElement);
+                });
+
+                // Attach event listeners to delete buttons
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const postId = event.target.getAttribute('data-id');
+                        deletePost(postId);
+                    });
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        // Function to delete a post
+        function deletePost(postId) {
+            fetch(`/api/deletePost/${postId}`, {
+                method: 'DELETE',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to delete post');
+                    }
+                    return response.json();
+                })
+                .then(result => {
+                    alert('Post deleted successfully');
+                    location.reload(); // Reload the page to refresh posts
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #175c95;
+            color: #fff;
+            font-size: 1.5rem;
+            text-align: center;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .form-control {
+            border-radius: 8px;
+        }
+        .btn-primary {
+            background-color: #175c95;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #144a7b;
+        }
+        .btn-reset {
+            background-color: #6c757d;
+            border: none;
+        }
+        .btn-reset:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                Create a New Post
+            </div>
+            <div class="card-body">
+                <form id="postForm">
+                    <div class="mb-3">
+                        <label for="postTitle" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="postTitle" name="title" placeholder="Enter post title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="postContent" class="form-label">Content</label>
+                        <textarea class="form-control" id="postContent" name="content" rows="4" placeholder="Write your post content here..." required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="postImage" class="form-label">Upload Image</label>
+                        <input type="file" class="form-control" id="postImage" name="image" accept="image/*">
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-reset me-2" onclick="resetForm()">Reset</button>
+                        <button type="button" class="btn btn-primary" onclick="submitPost()">Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+       /* function submitPost() {
+            const form = document.getElementById('postForm');
+            const formData = new FormData(form);
+
+            fetch('http://localhost:5000/addPost', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                form.reset(); // Reset the form after submission
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function resetForm() {
+            document.getElementById('postForm').reset();
+        }*/
+        function submitPost() {
+    const form = document.getElementById('postForm');
+    const formData = new FormData(form);
+
+    // Fetch the user's fullname from the profile
+    fetch('/api/getAlumniProfile')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch user profile');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Add fullname to form data
+            formData.append('fullname', data.fullname);
+            formData.append('email', data.email);
+            formData.append('profile_photo',data.profile_photo ? `/uploads/${data.profile_photo}` : 'https://via.placeholder.com/30')
+            //formData.append('fullname', data.profile_photo);
+
+            // Send the form data to the server
+            return fetch('http://localhost:5000/addPost', {
+                method: 'POST',
+                body: formData,
+            });
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            form.reset(); // Reset the form after submission
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

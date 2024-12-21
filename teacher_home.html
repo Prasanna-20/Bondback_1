@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+    }
+
+    /* Header styles */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .profile {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .profile:hover .profile-dropdown {
+      display: block;
+    }
+
+    .profile img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    .profile-dropdown {
+      display: none;
+      position: absolute;
+      top: 50px;
+      left: 0;
+      background-color: #ffffff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .profile-dropdown a {
+      text-decoration: none;
+      color: #333;
+      display: block;
+      padding: 5px 10px;
+    }
+
+    .profile-dropdown a:hover {
+      background-color: #f0f0f0;
+    }
+
+    .search-bar {
+      flex-grow: 1;
+      margin: 0 20px;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .nav-options {
+      display: flex;
+      gap: 15px;
+    }
+
+    .nav-options a {
+      text-decoration: none;
+      color: #0073b1;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 20px;
+      background-color: #eaf4ff;
+    }
+
+    .nav-options a:hover {
+      background-color: #d0e7ff;
+    }
+
+    /* Posts section */
+    .posts {
+      margin: 20px auto;
+      width: 90%;
+      max-width: 800px;
+    }
+
+    .post {
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      padding: 20px;
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .post-header img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+
+    .post-content {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    /* Responsive Design */
+    @media screen and (max-width: 768px) {
+      .header {
+        flex-wrap: wrap;
+        text-align: center;
+      }
+
+      .search-bar {
+        margin: 10px 0;
+      }
+
+      .nav-options {
+        flex-direction: column;
+      }
+
+      .nav-options a {
+        margin: 5px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <!-- Profile -->
+    <div class="profile">
+      <img src="https://via.placeholder.com/40" alt="Teacher Profile">
+      <div class="profile-dropdown">
+        <a href="teacher_profile.html">View Profile</a>
+        <a href="teacher_edit.html">Edit Profile</a>
+        <a href="teacher-signin.html">Logout</a>
+      </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input type="text" placeholder="Search students, posts...">
+    </div>
+
+    <!-- Navigation Options -->
+    <div class="nav-options">
+      <a href="#">Chat</a>
+    </div>
+  </header>
+
+  <!-- Posts Section -->
+  <section class="posts">
+    <!-- Post 1 -->
+    <div class="post">
+      <div class="post-header">
+        <img src="https://via.placeholder.com/50" alt="Teacher">
+        <div>
+          <h4>Dr. Alice Cooper</h4>
+          <small>Professor of Computer Science</small>
+        </div>
+      </div>
+      <div class="post-content">
+        Just concluded an amazing lecture on Artificial Intelligence! It's incredible to see how students are engaging with this topic. Looking forward to the next session.
+      </div>
+    </div>
+
+    <!-- Post 2 -->
+    <div class="post">
+      <div class="post-header">
+        <img src="https://via.placeholder.com/50" alt="Teacher">
+        <div>
+          <h4>Prof. Bob Brown</h4>
+          <small>Head of Mathematics Department</small>
+        </div>
+      </div>
+      <div class="post-content">
+        Excited to announce a new research paper on Differential Equations published in the International Journal of Mathematics. Thanks to the entire team for their dedication!
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

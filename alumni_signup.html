@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alumni Sign Up - BondBack</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    /* Reset and Base Styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-size: cover;
+      background: url('https://www.shutterstock.com/image-vector/graduation-silhouette-water-color-painting-260nw-531382432.jpg') no-repeat center center/cover;
+      color: #333;
+    }
+
+    .container {
+      position: relative;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      padding: 40px 30px;
+      text-align: center;
+      margin: 20px auto;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #9f0b49;
+      margin-bottom: 20px;
+    }
+
+    .form-title {
+      font-size: 1.8rem;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .form-group input {
+      padding: 12px;
+      font-size: 0.9rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      width: 100%;
+      background-color: #f9f9f9;
+    }
+
+    .form-group input[type="file"] {
+      border: none;
+      padding: 8px 0;
+    }
+
+    .file-label {
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    .file-input-container {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      width: 100%;
+    }
+
+    .file-input {
+      border: none;
+      background: transparent;
+      display: inline-block;
+      color: #9f0b49;
+      cursor: pointer;
+    }
+
+    .file-input:hover {
+      text-decoration: underline;
+    }
+
+    .form-button {
+      background: linear-gradient(135deg, #9f0b49, #ff758f);
+      color: #fff;
+      padding: 14px 26px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      width: 100%;
+      cursor: pointer;
+      transition: all 0.4s ease-in-out;
+    }
+
+    .form-button:hover {
+      transform: scale(1.03);
+      background: linear-gradient(135deg, #ff758f, #ff8ba0);
+    }
+
+    .profile-picture {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 20px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid #9f0b49;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f9f9f9;
+    }
+
+    .profile-picture img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-picture input[type="file"] {
+      display: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      .logo {
+        font-size: 2.5rem;
+      }
+
+      .form-title {
+        font-size: 1.6rem;
+      }
+
+      .form-button {
+        padding: 12px 24px;
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px 15px;
+      }
+
+      .logo {
+        font-size: 2rem;
+      }
+
+      .form-title {
+        font-size: 1.4rem;
+      }
+
+      .form-button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+
+      .form-group input {
+        padding: 10px;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">BondBack</div>
+
+    <!-- Form Title -->
+    <div class="form-title">Alumni Sign Up</div>
+
+    <!-- Profile Picture -->
+    <form action="http://localhost:5000/alumni_signup" method="POST" enctype="multipart/form-data">
+    <div class="profile-picture">
+      <img id="profile_photo" src="https://www.w3schools.com/w3images/avatar2.png" alt="Profile Picture">
+    </div>
+    <br>
+    <label class="file-input" for="profile_photo">Upload Profile Picture</label>
+    <br>
+    <input type="file" id="profile_photo" name="profile_photo" accept="image/*" onchange="previewImage(event)">
+
+    <!-- Form Fields -->
+    
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Choose a unique username" required>
+      </div>
+
+      <div class="form-group">
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="contactNo">Contact Number</label>
+        <input type="text" id="contactNo" name="contactNo" placeholder="Enter your contact number" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+      </div>
+
+      <!-- Additional Fields -->
+      <div class="form-group">
+        <label for="curr_org">Current Organization</label>
+        <input type="text" id="curr_org" name="curr_org" placeholder="Enter your current organization" required>
+      </div>
+
+      <!-- Additional Fields -->
+      <div class="form-group">
+        <label for="Cno">UEC Number</label>
+        <input type="text" id="Cno" name="Cno" placeholder="Enter your C_Number" required>
+      </div>
+
+      <div class="form-group">
+        <label for="pass_year">Passing Year</label>
+        <input type="number" id="pass_year" name="pass_year" placeholder="Enter your passing year" required>
+      </div>
+
+      <div class="form-group">
+        <label for="prev_exp">Experience</label>
+        <input type="text" id="prev_exp" name="prev_exp" placeholder="Enter your experience in years" required>
+      </div>
+
+      <div class="form-group">
+        <label for="domain">Domain of Expertise</label>
+        <input type="text" id="domain" name="domain" placeholder="Enter your domain of expertise" required>
+      </div>
+
+      <div class="form-group">
+        <label for="location">Location</label>
+        <input type="text" id="location" name="location" placeholder="Enter your current location" required>
+      </div>
+
+      <div class="form-group">
+        <label for="linkedin_link">LinkedIn Profile</label>
+        <input type="url" id="linkedin_link" name="linkedin_link" placeholder="Enter your LinkedIn profile link" required>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="form-button">Sign Up</button>
+    </form>
+
+    <!-- Link to Sign In -->
+    <div style="margin-top: 15px;">
+      <a href="alumni-signin.html" style="color: #9f0b49; font-size: 0.9rem; text-decoration: none;">Already have an account? Sign In</a>
+    </div>
+  </div>
+
+  <script>
+    // Preview uploaded image
+    function previewImage(event) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        const output = document.getElementById('profile_photo');
+        output.src = reader.result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  </script>
+</body>
+</html>

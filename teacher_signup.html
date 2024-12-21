@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Sign Up - BondBack</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    /* Reset and Base Styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-size: cover;
+      background: url('data:image/jpeg;base64,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') no-repeat center center/cover;
+      color: #333;
+    }
+
+    .container {
+      position: relative;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      padding: 40px 30px;
+      text-align: center;
+      margin: 20px auto;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #9f0b49;
+      margin-bottom: 20px;
+    }
+
+    .form-title {
+      font-size: 1.8rem;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .form-group input {
+      padding: 12px;
+      font-size: 0.9rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      width: 100%;
+      background-color: #f9f9f9;
+    }
+
+    .form-group input[type="file"] {
+      border: none;
+      padding: 8px 0;
+    }
+
+    .file-label {
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    .file-input-container {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      width: 100%;
+    }
+
+    .file-input {
+      border: none;
+      background: transparent;
+      display: inline-block;
+      color: #9f0b49;
+      cursor: pointer;
+    }
+
+    .file-input:hover {
+      text-decoration: underline;
+    }
+
+    .form-button {
+      background: linear-gradient(135deg, #9f0b49, #ff758f);
+      color: #fff;
+      padding: 14px 26px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      width: 100%;
+      cursor: pointer;
+      transition: all 0.4s ease-in-out;
+    }
+
+    .form-button:hover {
+      transform: scale(1.03);
+      background: linear-gradient(135deg, #ff758f, #ff8ba0);
+    }
+
+    .profile-picture {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 20px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid #9f0b49;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f9f9f9;
+    }
+
+    .profile-picture img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-picture input[type="file"] {
+      display: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      .logo {
+        font-size: 2.5rem;
+      }
+
+      .form-title {
+        font-size: 1.6rem;
+      }
+
+      .form-button {
+        padding: 12px 24px;
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px 15px;
+      }
+
+      .logo {
+        font-size: 2rem;
+      }
+
+      .form-title {
+        font-size: 1.4rem;
+      }
+
+      .form-button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+
+      .form-group input {
+        padding: 10px;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">BondBack</div>
+    <form action="http://localhost:5000/teacher_signup" method="POST" enctype="multipart/form-data"></form>
+    <!-- Form Title -->
+    <div class="form-title">Teacher Sign Up</div>
+
+    <!-- Profile Picture -->
+    <div class="profile-picture">
+      <img id="profileImg" src="https://www.w3schools.com/w3images/avatar2.png" alt="Profile Picture">
+    </div>
+    <br>
+    <label class="file-input" for="profilePic">Upload Profile Picture</label>
+    <br>
+    <input type="file" id="profilePic" name="profile_photo" accept="image/*" onchange="previewImage(event)">
+
+    <!-- Form Fields -->
+   
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Choose a unique username" required>
+      </div>
+
+      <div class="form-group">
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="contactNo">Contact Number</label>
+        <input type="text" id="contactNo" name="contactNo" placeholder="Enter your contact number" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+      </div>
+
+      <!-- New Branch Field -->
+      <div class="form-group">
+        <label for="branch">Branch</label>
+        <input type="text" id="branch" name="branch" placeholder="Enter your branch" required>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="form-button">Sign Up</button>
+    </form>
+
+    <!-- Link to Sign In -->
+    <div style="margin-top: 15px;">
+      <a href="teacher-signin.html" style="color: #9f0b49; font-size: 0.9rem; text-decoration: none;">Already have an account? Sign In</a>
+    </div>
+  </div>
+
+  <script>
+    // Preview uploaded image
+    function previewImage(event) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        const output = document.getElementById('profileImg');
+        output.src = reader.result;
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  </script>
+</body>
+</html>
